@@ -19,3 +19,13 @@
   width: 100%;
   height: 2.5rem;            /* Footer height */
 }
+
+.logo {
+  padding-top: 1rem;
+  font-family: 'Lora', serif;
+  font-size: xx-large;
+}
+
+.upper-padding {
+  padding-top: 1rem;
+}
