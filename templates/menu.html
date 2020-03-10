@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheet %}<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
+{% block navbar %}Menu{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid text-center title-text">Our Menu</div>
+
+    {% if user.is_authenticated %}
+        <!--Show menu if authenticated-->
+        <div class="container-fluid text-center">
+            <a href="#">Pizza</a> | 
+            <a href="#">Subs</a> | 
+            <a href="#">Pasta</a> | 
+            <a href="#">Salads</a> | 
+            <a href="#">Dinner Platters</a>
+        </div>
+    {% else %}
+        <div class="container-fluid text-center">
+            <a href="#">Log in</a> to order
+        </div>
+    {% endif %}
+
+    <div class="container text-center main-menu">
+        {% include 'includes/pizza-menu.html' %}
+    </div>
+    
+
+
+{% endblock %}
