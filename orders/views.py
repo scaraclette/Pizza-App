@@ -7,3 +7,7 @@ def index(request):
 
 def menu(request):
     return render(request, "menu.html")
+
+def pizza(request):
+    if request.method == 'GET':
+        return render(request, "pizza.html")
