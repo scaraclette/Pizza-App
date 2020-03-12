@@ -11,3 +11,19 @@ def menu(request):
 def pizza(request):
     if request.method == 'GET':
         return render(request, "pizza.html")
+
+def sub(request):
+    if request.method == 'GET':
+        return render(request, "sub.html")
+
+def pasta(request):
+    if request.method == 'GET':
+        return render(request, "pasta.html")
+
+def salad(request):
+    if request.method == 'GET':
+        return render(request, "salad.html")
+
+def platter(request):
+    if request.method == 'GET':
+        return render(request, "platter.html")

@@ -10,11 +10,11 @@
     {% if user.is_authenticated %}
         <!--Show menu if authenticated-->
         <div class="container-fluid text-center">
-            <a href="#">Pizza</a> | 
-            <a href="#">Subs</a> | 
-            <a href="#">Pasta</a> | 
-            <a href="#">Salads</a> | 
-            <a href="#">Dinner Platters</a>
+            <a href="{% url 'pizza' %}">Pizza</a> | 
+            <a href="{% url 'sub' %}">Subs</a> | 
+            <a href="{% url 'pasta' %}">Pasta</a> | 
+            <a href="{% url 'salad' %}">Salads</a> | 
+            <a href="{% url 'platter' %}">Dinner Platters</a>
         </div>
     {% else %}
         <div class="container-fluid text-center">
@@ -30,6 +30,7 @@
             Artichoke - Buffalo Chicken - Barbecue Chicken - Anchovies<br>
             Black Olives - Fresh Garlic - Zucchini<br>
             </p>
+            <p><em>NEW!</em> - Make your pizza <em>special</em> with our limited time only truffle topping with 3 free toppings included.</p>
         </div>
     <div class="container text-center main-menu">
         {% include 'includes/pizza-menu.html' %}
@@ -39,6 +40,4 @@
         {% include 'includes/platter-menu.html' %}
     </div>
     
-
-
 {% endblock %}
