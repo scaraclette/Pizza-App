@@ -25,13 +25,14 @@ class Pizza(models.Model):
     )
     pizzaType = models.CharField(max_length=1, choices=PIZZA_TYPE)
     pizzaSize = models.CharField(max_length=1, choices=PIZZA_SIZE)
+    isSpecial = models.BooleanField(blank=True, default=False)
 
     # if no topping, pizza is cheese
     pizzaTopping = models.ManyToManyField(Topping, blank=True)
     pizzaPrice = models.DecimalField(max_digits=4, decimal_places=2)
 
     def __str__(self):
-        return f"{self.pizzaSize}, {self.pizzaType}, {self.pizzaTopping}, {self.pizzaPrice}"
+        return f"{self.pizzaSize}, {self.pizzaType}, {self.pizzaTopping}, {self.pizzaPrice}, {self.isSpecial}"
 
 class Sub(models.Model):
     SMALL = 's'
