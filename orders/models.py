@@ -26,6 +26,7 @@ class Pizza(models.Model):
     pizzaType = models.CharField(max_length=1, choices=PIZZA_TYPE)
     pizzaSize = models.CharField(max_length=1, choices=PIZZA_SIZE)
     isSpecial = models.BooleanField(blank=True, default=False)
+    totalTopping = models.IntegerField(default=0)
 
     # if no topping, pizza is cheese
     pizzaTopping = models.ManyToManyField(Topping, blank=True)
