@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from .models import *
 
 # Create your views here.
 def index(request):
@@ -9,8 +10,15 @@ def menu(request):
     return render(request, "menu.html")
 
 def pizza(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         return render(request, "pizza.html")
+
+    # When request is GET
+    toppings = Topping.objects.all()
+    context = {
+        'toppings':toppings,
+    }
+    return render(request, "pizza.html", context)
 
 def sub(request):
     if request.method == 'GET':

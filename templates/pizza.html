@@ -1,24 +1,76 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block stylesheet %}<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}
 {% block navbar %}Menu{% endblock %}
 
 {% block body %}
 
-    <div class="container-fluid text-center title-text">Our Menu</div>
-    <div class="container-fluid text-center">
-            <a href="{% url 'pizza' %}">Pizza</a> | 
-            <a href="{% url 'sub' %}">Subs</a> | 
-            <a href="{% url 'pasta' %}">Pasta</a> | 
-            <a href="{% url 'salad' %}">Salads</a> | 
-            <a href="{% url 'platter' %}">Dinner Platters</a>
-        </div>
-    <div class="container-fluid text-center">
-        <a href="{% url 'menu' %}">main menu</a>
-    </div>
+<div class="container-fluid text-center title-text">Our Menu</div>
+<div class="container-fluid text-center">
+    <a href="{% url 'pizza' %}">Pizza</a> |
+    <a href="{% url 'sub' %}">Subs</a> |
+    <a href="{% url 'pasta' %}">Pasta</a> |
+    <a href="{% url 'salad' %}">Salads</a> |
+    <a href="{% url 'platter' %}">Dinner Platters</a>
+</div>
+<div class="container-fluid text-center">
+    <a href="{% url 'menu' %}">main menu</a>
+</div>
 
-    <div class="container text-center main-menu">
-        {% include 'includes/pizza-menu.html' %}
+<div class="container text-center main-menu">
+    {% include 'includes/pizza-menu.html' %}
+</div>
+
+
+<form action="{% url 'pizza' %}" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <p>Select topping(s)</p>
+                {% for t in toppings %}
+                <input class="form-check-input" type="checkbox" value="{{ t.id}}" name="toppings">
+                <label class="form-check-label" for="{{t.topping}}">
+                    {{t.topping}}
+                </label>
+                <br>
+                {% endfor %}
+            </div>
+            <div class="col">
+                <div class="container">
+                    <p>
+                        <b>Sicilian Pizza</b><br>Our Sicilian pizza is a deep-dish or thick-crust pizza. We sell them in
+                        a 9-slice or a 15-slice size.<br>
+                        <b>Regular Pizza</b><br>Our Regular pizza is a thin-crust or Neapolitan pizza. They come in 2
+                        sizes: small (12" in diameter) and large (16" in diameter). The small is suitable for 1 to 2
+                        people while the large feeds 2 to 4 people.
+                    </p>
+                </div>
+                <p>Choose your pizza type
+                    <select name="pizzaType">
+                        <option value="R">Regular</option>
+                        <option value="S">Sicilian</option>
+                    </select>
+                </p>
+                <p>Choose your pizza size
+                    <select name="pizzaSize">
+                        <option value="s">Small</option>
+                        <option value="l">Large</option>
+                    </select>
+                </p>
+                <p>Make it special?
+                    <select name="isSpecial">
+                        <option value="False">No</option>
+                        <option value="True">Yes</option>
+                    </select>
+                </p>
+
+            </div>
+        </div>
     </div>
-    
+</form>
+
+
 {% endblock %}

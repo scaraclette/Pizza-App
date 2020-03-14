@@ -99,3 +99,37 @@ for s in sub:
     subPrice = s.get('price')
     new = Sub(subName=subName, subPrice=subPrice, subSize=subSize)
     new.save()
+
+# PIZZA
+pizza = [
+    {'type':'R', 'size':'s', 'special':False,'topping':0, 'price':12.70},
+    {'type':'R', 'size':'s', 'special':False,'topping':1, 'price':13.70},
+    {'type':'R', 'size':'s', 'special':False,'topping':2, 'price':15.20},
+    {'type':'R', 'size':'s', 'special':False,'topping':3, 'price':16.20},
+    {'type':'R', 'size':'s', 'special':True,'topping':0, 'price':17.75},
+    {'type':'R', 'size':'l', 'special':False,'topping':0, 'price':17.95},
+    {'type':'R', 'size':'l', 'special':False,'topping':1, 'price':19.95},
+    {'type':'R', 'size':'l', 'special':False,'topping':2, 'price':21.95},
+    {'type':'R', 'size':'l', 'special':False,'topping':3, 'price':23.95},
+    {'type':'R', 'size':'l', 'special':True,'topping':0, 'price':25.95},
+    {'type':'S', 'size':'s', 'special':False,'topping':0, 'price':24.45},
+    {'type':'S', 'size':'s', 'special':False,'topping':1, 'price':26.45},
+    {'type':'S', 'size':'s', 'special':False,'topping':2, 'price':28.45},
+    {'type':'S', 'size':'s', 'special':False,'topping':3, 'price':29.45},
+    {'type':'S', 'size':'s', 'special':True,'topping':0, 'price':30.45},
+    {'type':'S', 'size':'l', 'special':False,'topping':0, 'price':38.70},
+    {'type':'S', 'size':'l', 'special':False,'topping':1, 'price':40.70},
+    {'type':'S', 'size':'l', 'special':False,'topping':2, 'price':42.70},
+    {'type':'S', 'size':'l', 'special':False,'topping':3, 'price':44.70},
+    {'type':'S', 'size':'l', 'special':True,'topping':0, 'price':45.70},
+]
+
+for p in pizza:
+    pizzaType = p.get('type')
+    pizzaSize = p.get('size')
+    isSpecial = p.get('special')
+    totalTopping = p.get('topping')
+    pizzaPrice = p.get('price')
+    new = Pizza(pizzaType=pizzaType, pizzaSize=pizzaSize, isSpecial=isSpecial,
+    totalTopping=totalTopping, pizzaPrice=pizzaPrice)
+    new.save()
