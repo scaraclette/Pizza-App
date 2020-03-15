@@ -1,43 +1,59 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block stylesheet %}<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
 {% block navbar %}Menu{% endblock %}
 
 {% block body %}
 
-    <div class="container-fluid text-center title-text">Our Menu</div>
+<div class="container-fluid text-center title-text">Our Menu</div>
 
-    {% if user.is_authenticated %}
-        <!--Show menu if authenticated-->
-        <div class="container-fluid text-center">
-            <a href="{% url 'pizza' %}">Pizza</a> | 
-            <a href="{% url 'sub' %}">Subs</a> | 
-            <a href="{% url 'pasta' %}">Pasta</a> | 
-            <a href="{% url 'salad' %}">Salads</a> | 
-            <a href="{% url 'platter' %}">Dinner Platters</a>
-        </div>
-    {% else %}
-        <div class="container-fluid text-center">
-            (Log in to order)
-        </div>
-    {% endif %}
-        <div class="container text-center">
-            <br>
-            <p>Welcome to <em>Pinocchio's Pizza & Subs</em>, Harvard's beloved family owned pizzeria and more! Enjoy our pizzas, subs, pasta, salad, and dinner platters freshly made. <br>We believe in the quality of our ingredients and toppings which are sourced from local farmers. </p>
-            <p>Toppings include:<br>
-            Pepperoni - Sausage - Mushrooms - Onions - Ham - Canadian Bacon<br>
-            Pineapple - Eggplant - Tomato & Basil - Hamburger - Spinach<br>
-            Artichoke - Buffalo Chicken - Barbecue Chicken - Anchovies<br>
-            Black Olives - Fresh Garlic - Zucchini<br>
-            </p>
-            <p><em>NEW!</em> - Make your pizza <em>special</em> with our limited time only truffle topping with 3 free toppings included.</p>
-        </div>
-    <div class="container text-center main-menu">
-        {% include 'includes/pizza-menu.html' %}
-        {% include 'includes/sub-menu.html' %}
-        {% include 'includes/pasta-menu.html' %}
-        {% include 'includes/salad-menu.html' %}
-        {% include 'includes/platter-menu.html' %}
-    </div>
-    
+{% if user.is_authenticated %}
+<!--Show menu if authenticated-->
+<div class="container-fluid text-center">
+    <a href="{% url 'pizza' %}">Pizza</a> |
+    <a href="{% url 'sub' %}">Subs</a> |
+    <a href="{% url 'pasta' %}">Pasta</a> |
+    <a href="{% url 'salad' %}">Salads</a> |
+    <a href="{% url 'platter' %}">Dinner Platters</a>
+</div>
+{% else %}
+<div class="container-fluid text-center">
+    (Log in to order)
+</div>
+{% endif %}
+<div class="container text-center">
+    <br>
+    <p>Welcome to <em>Pinocchio's Pizza & Subs</em>, Harvard's beloved family owned pizzeria and more! Enjoy our pizzas,
+        subs, pasta, salad, and dinner platters freshly made. <br>We believe in the quality of our ingredients and
+        toppings which are sourced from local farmers. </p>
+    <p>Toppings include:<br>
+        Pepperoni - Sausage - Mushrooms - Onions - Ham - Canadian Bacon<br>
+        Pineapple - Eggplant - Tomato & Basil - Hamburger - Spinach<br>
+        Artichoke - Buffalo Chicken - Barbecue Chicken - Anchovies<br>
+        Black Olives - Fresh Garlic - Zucchini<br>
+    </p>
+    <p><em>NEW!</em> - Make your pizza <em>special</em> with our limited time only truffle topping with 3 free toppings
+        included.</p>
+</div>
+<div class="container text-center main-menu">
+    {% include 'includes/pizza-menu.html' %}
+    {% include 'includes/sub-menu.html' %}
+    {% include 'includes/pasta-menu.html' %}
+    {% include 'includes/salad-menu.html' %}
+    {% include 'includes/platter-menu.html' %}
+</div>
+
+
+{% if user.is_authenticated %}
+<!--Show menu if authenticated-->
+<div class="container-fluid text-center">
+    <a href="{% url 'pizza' %}">Pizza</a> |
+    <a href="{% url 'sub' %}">Subs</a> |
+    <a href="{% url 'pasta' %}">Pasta</a> |
+    <a href="{% url 'salad' %}">Salads</a> |
+    <a href="{% url 'platter' %}">Dinner Platters</a>
+</div>
+{% endif %}
+
 {% endblock %}

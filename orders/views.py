@@ -11,7 +11,24 @@ def menu(request):
 
 def pizza(request):
     if request.method == 'POST':
-        return render(request, "pizza.html")
+        user = request.user
+        toppings = request.POST.getlist('toppings')
+        pizzaType = request.POST['pizzaType']
+        pizzaSize = request.POST['pizzaSize']
+        special = request.POST['isSpecial']
+        isSpecial = False
+        if special == True:
+            isSpecial = True
+        getPizza = Pizza.objects.get(pizzaType=pizzaType, pizzaSize=pizzaSize, isSpecial=isSpecial, totalTopping = len(toppings))
+        newPizza = CustomerPizza.objects.create(customer=user, pizzaType=pizzaType, pizzaSize=pizzaSize, isSpecial=isSpecial, pizzaPrice=getPizza.pizzaPrice)
+        for top in toppings:
+            newPizza.pizzaTopping.add(Topping.objects.get(topping=top))
+
+        
+        context = {
+            'pizza':newPizza,
+        }
+        return render(request, "test.html", context)
 
     # When request is GET
     toppings = Topping.objects.all()

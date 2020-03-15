@@ -1,0 +1,5 @@
+For cart later
+from django.contrib.auth.models import User
+from orders.models import *
+user = User.objects.first()
+cart = user.cartOwner.all().last()
