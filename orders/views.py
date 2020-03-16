@@ -67,7 +67,8 @@ def sub(request):
             newSub = CustomerSub.objects.create(subName=subName, subSize=subSize, subPrice=subPrice)
             if extraCheese == 'True':
                 newSub.subPrice += Decimal(0.5)
-                newSub.subTopping.add(Topping.objects.get(topping='Cheese')) 
+                newSub.extraCheese = True
+                newSub.save()
             for top in steakTopping:
                 newSub.subTopping.add(Topping.objects.get(topping=top))
             
@@ -107,10 +108,17 @@ def platter(request):
 
 def cart(request):
     user = request.user
-    currentCart = user.cartOwner.all().last()
-    checkPizza = currentCart.pizzaOrdered.all()
+    try:
+        currentCart = user.cartOwner.all().last()
+        checkPizza = currentCart.pizzaOrdered.all()
+    except:
+        context = {
+            "message": True,
+        }
+        return render(request, "cart.html", context)
+
     checkSub = currentCart.subOrdered.all()
-    pizza = checkPizza != None
+    pizza = len(checkPizza) != 0
     sub = checkSub != None
     print(checkSub)
     context = {

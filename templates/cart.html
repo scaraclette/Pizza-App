@@ -13,58 +13,12 @@
 <div class="container-fluid text-center title-text">{{user.username}}'s Cart</div>
 <div class="container ">
 
-    {% if pizza %}
-    <b>Pizza:</b><br>
-        {% for p in cart.pizzaOrdered.all %}
-            <p>
-                {% if p.pizzaSize == 's' %}
-                Small
-                {% else %}
-                Large
-                {% endif %}
-                {% if p.pizzaType == 'R' %}
-                Regular
-                {% else %}
-                Sicilian
-                {% endif %}
-                <br>
-
-
-                Toppings:
-                {% for t in p.pizzaTopping.all %}
-                ({{t}})
-                {% endfor %}
-                <br>
-
-                total: ${{p.pizzaPrice}}
-                <br>
-            </p>
-        {% endfor %}
+    {% if message %}
+        <div class="container text-center">Cart is empty!</div>
+    {% else %}
+        {% include 'includes/cart-items.html' %}
     {% endif %}
 
-    {% if sub %}
-    <b>Sub:</b><br>
-        {% for s in checkSub %}
-            <p>
-                {% if s.subSize == 's' %}
-                Small
-                {% else %}
-                Large
-                {% endif %}
-                {{s.subName}}
-                <br>
-
-                Toppings:
-                {% for t in s.subTopping.all %}
-                ({{t}})
-                {% endfor %}
-                <br>
-
-                total: ${{s.subPrice}}
-                <br>
-            </p>
-        {% endfor %}
-    {% endif %}
 
 
 </div>

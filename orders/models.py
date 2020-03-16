@@ -89,7 +89,7 @@ class CustomerSub(models.Model):
     subSize = models.CharField(max_length=1, choices=SUB_SIZE)
     subName = models.CharField(max_length=64)
     subPrice = models.DecimalField(max_digits=4, decimal_places=2)
-
+    extraCheese = models.BooleanField(default=False)
     subTopping = models.ManyToManyField(Topping, blank=True)
     def __str__(self):
         return f"{self.subSize}, {self.subName}, {self.subPrice}, {self.subTopping}"
@@ -131,4 +131,5 @@ class Cart(models.Model):
     pastaOrdered = models.ManyToManyField(Pasta, blank=True)
     saladOrdered = models.ManyToManyField(Salad, blank=True)
     platterOrdered = models.ManyToManyField(Platter, blank=True)
+    cartPaid = models.BooleanField(default=False)
     

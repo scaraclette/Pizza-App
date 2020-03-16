@@ -1,0 +1,60 @@
+<!--PIZZA-->
+{% if pizza %}
+<b>Pizza:</b><br>
+{% for p in cart.pizzaOrdered.all %}
+<p>
+    {% if p.pizzaSize == 's' %}
+    Small
+    {% else %}
+    Large
+    {% endif %}
+    {% if p.pizzaType == 'R' %}
+    Regular
+    {% else %}
+    Sicilian
+    {% endif %}
+    <br>
+
+
+    Toppings:
+    {% for t in p.pizzaTopping.all %}
+    ({{t}})
+    {% endfor %}
+    <br>
+
+    total: ${{p.pizzaPrice}}
+    <br>
+</p>
+{% endfor %}
+{% endif %}
+
+<!--SUB-->
+{% if sub %}
+<b>Sub:</b><br>
+{% for s in checkSub %}
+<p>
+    {% if s.subSize == 's' %}
+    Small
+    {% else %}
+    Large
+    {% endif %}
+    {{s.subName}}
+    <br>
+
+    Toppings:
+    {% for t in s.subTopping.all %}
+    ({{t}})
+    {% endfor %}
+    <br>
+
+    {% if s.extraCheese %}
+    Added extra cheese<br>
+    {% endif %}
+
+    total: ${{s.subPrice}}
+    <br>
+</p>
+{% endfor %}
+{% endif %}
+
+<!--PASTA-->
