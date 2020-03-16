@@ -24,9 +24,21 @@ def pizza(request):
         for top in toppings:
             newPizza.pizzaTopping.add(Topping.objects.get(topping=top))
 
-        
+        # Add to cart
+        currentCart = user.cartOwner.all().last()
+        # if cart doesn't exist, create new cart and add the totalPrice
+        if currentCart == None:
+            newCart = Cart.objects.create(customer=user, totalPrice=newPizza.pizzaPrice)
+            newCart.pizzaOrdered.add(newPizza)
+            newCart.save()
+        else:
+            currentCart.totalPrice += newPizza.pizzaPrice
+            currentCart.pizzaOrdered.add(newPizza)
+            currentCart.save()
+
         context = {
-            'pizza':newPizza,
+            'message':True,
+            'toppings':Topping.objects.all()
         }
         return render(request, "test.html", context)
 

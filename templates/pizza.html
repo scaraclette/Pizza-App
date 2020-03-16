@@ -8,6 +8,10 @@
 
 {% block body %}
 
+{% if message %}
+<div class="container-fluid text-center title-text">Pizza added to cart!</div>
+{% endif %}
+
 <div class="container-fluid text-center title-text">Our Menu</div>
 <div class="container-fluid text-center">
     <a href="{% url 'pizza' %}">Pizza</a> |
