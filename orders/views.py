@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
+from decimal import Decimal
 
 # Create your views here.
 def index(request):
@@ -40,7 +41,7 @@ def pizza(request):
             'message':True,
             'toppings':Topping.objects.all()
         }
-        return render(request, "test.html", context)
+        return render(request, "pizza.html", context)
 
     # When request is GET
     toppings = Topping.objects.all()
@@ -50,8 +51,46 @@ def pizza(request):
     return render(request, "pizza.html", context)
 
 def sub(request):
-    if request.method == 'GET':
-        return render(request, "sub.html")
+    if request.method == 'POST':
+        user = request.user
+        subName = request.POST['subName']
+        print(subName)
+        print(type(subName))
+        extraCheese = request.POST['extraCheese']
+        if subName == 'Steak + Cheese':
+            print("heyyy")
+            steakTopping = request.POST.getlist('steakTopping')
+            subSize = request.POST['subSize']
+            getSub = Sub.objects.get(subName=subName, subSize=subSize)
+            # Create new sub
+            subPrice = getSub.subPrice + Decimal((len(steakTopping) * 0.5))
+            if extraCheese == 'True':
+                subPrice += 0.5
+            newSub = CustomerSub.objects.create(subName=subName, subSize=subSize, subPrice=subPrice)
+            for top in steakTopping:
+                newSub.subTopping.add(Topping.objects.get(topping=top))
+            
+            # Add to cart
+            currentCart = user.cartOwner.all().last()
+            if currentCart == None:
+                newCart = Cart.objects.create(customer=user, totalPrice=newSub.subPrice)
+                newCart.subOrdered.add(newSub)
+                newCart.save()
+            else:
+                currentCart.totalPrice += newSub.subPrice
+                currentCart.subOrdered.add(newSub)
+                currentCart.save()
+        elif subName == 'Sausage, Peppers & Onions':
+            pass
+        else:
+            print("other")
+
+        context = {
+            'message':True,
+        }
+        return render(request, "sub.html", context)
+
+    return render(request, "sub.html")
 
 def pasta(request):
     if request.method == 'GET':
