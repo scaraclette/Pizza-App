@@ -1,24 +1,84 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block stylesheet %}<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">
+<script src="{% static 'js/sub.js' %}"></script>
+{% endblock %}
 {% block navbar %}Menu{% endblock %}
 
 {% block body %}
+{% if message %}
+<div class="container-fluid text-center message-text">Sub added to cart!</div>
+{% endif %}
 
-    <div class="container-fluid text-center title-text">Our Menu</div>
-    <div class="container-fluid text-center">
-            <a href="{% url 'pizza' %}">Pizza</a> | 
-            <a href="{% url 'sub' %}">Subs</a> | 
-            <a href="{% url 'pasta' %}">Pasta</a> | 
-            <a href="{% url 'salad' %}">Salads</a> | 
-            <a href="{% url 'platter' %}">Dinner Platters</a>
+<div class="container-fluid text-center title-text">Our Menu</div>
+<div class="container-fluid text-center">
+    <a href="{% url 'pizza' %}">Pizza</a> |
+    <a href="{% url 'sub' %}">Subs</a> |
+    <a href="{% url 'pasta' %}">Pasta</a> |
+    <a href="{% url 'salad' %}">Salads</a> |
+    <a href="{% url 'platter' %}">Dinner Platters</a>
+</div>
+<div class="container-fluid text-center">
+    <a href="{% url 'menu' %}">main menu</a>
+</div>
+
+<div class="container text-center main-menu">
+    {% include 'includes/sub-menu.html' %}
+</div>
+
+<form action="{% url 'sub' %}" method="post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <p>
+                    <b>Choose your sub</b><br>
+                    <select name="subName" id="subName">
+                        <option value="Cheese">Cheese</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Ham + Cheese">Ham + Cheese</option>
+                        <option value="Meatball">Meatball</option>
+                        <option value="Tuna">Tuna</option>
+                        <option value="Turkey">Turkey</option>
+                        <option value="Chicken Parmigiana">Chicken Parmigiana</option>
+                        <option value="Eggplant Parmigiana">Eggplant Parmigiana</option>
+                        <option value="Steak">Steak</option>
+                        <option value="Steak + Cheese">Steak + Cheese</option>
+                        <option value="Sausage, Peppers & Onions">Sausage, Peppers & Onions</option>
+                        <option value="Hamburger">Hamburger</option>
+                        <option value="Cheeseburger">Cheeseburger</option>
+                        <option value="Fried Chicken">Fried Chicken</option>
+                        <option value="Veggie">Veggie</option>
+                    </select>
+                </p>
+
+                <p>
+                    <b>Select Topping</b> (only available for Steak + Cheese)<br>
+                    <input type="checkbox" , value="Mushrooms" , name="steakTopping">Mushrooms<br>
+                    <input type="checkbox" , value="Green Peppers" , name="steakTopping">Green Peppers<br>
+                    <input type="checkbox" , value="Onions" , name="steakTopping">Onions<br>
+                </p>
+            </div>
+
+            <div class="col text-center">
+                <p>
+                    <b>Select Size</b> (Sausage, Peppers, & Onions only available in large)<br>
+                    <select name="subSize" id="subSize">
+                        <option value="s">Small</option>
+                        <option value="l">Large</option>
+                    </select>
+                </p>
+                <p><b>Extra Cheese</b>
+                    <select name="extraCheese">
+                        <option value="False">No</option>
+                        <option value="True">Yes</option>
+                    </select>
+                </p>
+                <button type="submit" class="btn btn-primary btn-block">Add Sub</button>
+            </div>
         </div>
-    <div class="container-fluid text-center">
-        <a href="{% url 'menu' %}">main menu</a>
     </div>
+</form>
 
-    <div class="container text-center main-menu">
-        {% include 'includes/sub-menu.html' %}
-    </div>
-    
 {% endblock %}
