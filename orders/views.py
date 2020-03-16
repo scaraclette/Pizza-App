@@ -64,9 +64,10 @@ def sub(request):
             getSub = Sub.objects.get(subName=subName, subSize=subSize)
             # Create new sub
             subPrice = getSub.subPrice + Decimal((len(steakTopping) * 0.5))
-            if extraCheese == 'True':
-                subPrice += 0.5
             newSub = CustomerSub.objects.create(subName=subName, subSize=subSize, subPrice=subPrice)
+            if extraCheese == 'True':
+                newSub.subPrice += Decimal(0.5)
+                newSub.subTopping.add(Topping.objects.get(topping='Cheese')) 
             for top in steakTopping:
                 newSub.subTopping.add(Topping.objects.get(topping=top))
             
@@ -103,3 +104,19 @@ def salad(request):
 def platter(request):
     if request.method == 'GET':
         return render(request, "platter.html")
+
+def cart(request):
+    user = request.user
+    currentCart = user.cartOwner.all().last()
+    checkPizza = currentCart.pizzaOrdered.all()
+    checkSub = currentCart.subOrdered.all()
+    pizza = checkPizza != None
+    sub = checkSub != None
+    print(checkSub)
+    context = {
+        "cart":currentCart,
+        "pizza":pizza,
+        "sub":sub,
+        "checkSub":checkSub
+    }
+    return render(request, "cart.html", context)
