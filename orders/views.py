@@ -33,7 +33,9 @@ def pizza(request):
             newCart.pizzaOrdered.add(newPizza)
             newCart.save()
         else:
-            currentCart.totalPrice += newPizza.pizzaPrice
+            currentPrice = currentCart.totalPrice + newPizza.pizzaPrice
+            print(currentPrice)
+            currentCart.totalPrice = currentPrice
             currentCart.pizzaOrdered.add(newPizza)
             currentCart.save()
 

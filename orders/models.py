@@ -132,7 +132,7 @@ class Platter(models.Model):
 # Implement last
 class Cart(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cartOwner')
-    totalPrice = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+    totalPrice = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     pizzaOrdered = models.ManyToManyField(CustomerPizza, blank=True)
     subOrdered = models.ManyToManyField(CustomerSub, blank=True)
     pastaOrdered = models.ManyToManyField(CustomerPasta, blank=True)
