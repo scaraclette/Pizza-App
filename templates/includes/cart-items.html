@@ -80,3 +80,22 @@
 </p>
 {% endfor %}
 {% endif %}
+
+<!--PLATTER-->
+{% if platter %}
+<b>Platter:</b><br>
+{% for p in checkPlatter %}
+<p>
+    {% if p.platterSize == 's' %}
+    Small
+    {% else %}
+    Large
+    {% endif %}
+    {{p.platterName}}
+    <br>
+
+    total: ${{p.platterPrice}}
+    <br>
+</p>
+{% endfor %}
+{% endif %}

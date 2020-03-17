@@ -150,8 +150,28 @@ def salad(request):
     return render(request, "salad.html")
 
 def platter(request):
-    if request.method == 'GET':
-        return render(request, "platter.html")
+    if request.method == 'POST':
+        user = request.user
+        platterName = request.POST['platterName']
+        platterSize = request.POST['platterSize']
+        getPlatter = Platter.objects.get(platterName=platterName, platterSize=platterSize)
+        newPlatter = CustomerPlatter.objects.create(platterName=platterName, platterSize=platterSize, platterPrice=getPlatter.platterPrice)
+
+        # Add to cart
+        currentCart = user.cartOwner.all().last()
+        if currentCart == None:
+            newCart = Cart.objects.create(customer=user, totalPrice=newPlatter.platterPrice)
+            newCart.platterOrdered.add(newPlatter)
+            newCart.save()
+        else:
+            currentCart.totalPrice += newPlatter.platterPrice
+            currentCart.platterOrdered.add(newPlatter)
+            currentCart.save()
+        context = {
+            "message":True,
+        }
+        return render(request, "platter.html", context)
+    return render(request, "platter.html")
 
 def cart(request):
     user = request.user
@@ -167,10 +187,12 @@ def cart(request):
     checkSub = currentCart.subOrdered.all()
     checkPasta = currentCart.pastaOrdered.all()
     checkSalad = currentCart.saladOrdered.all()
+    checkPlatter = currentCart.platterOrdered.all()
     pizza = len(checkPizza) != 0
     sub = len(checkSub) != 0
     pasta = len(checkPasta) != 0
     salad = len(checkSalad) != 0
+    platter = len(checkPlatter) != 0
 
     print(pizza)
     print(sub)
@@ -183,8 +205,13 @@ def cart(request):
         "sub":sub,
         "pasta":pasta,
         "salad":salad,
+        "platter":platter,
         "checkSub":checkSub,
         "checkPasta":checkPasta,
-        "checkSalad":checkSalad
+        "checkSalad":checkSalad,
+        "checkPlatter":checkPlatter,
     }
     return render(request, "cart.html", context)
+
+def pay(request):
+    return HttpResponse("paid")

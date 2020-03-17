@@ -136,6 +136,20 @@ class Platter(models.Model):
     def __str__(self):
         return f"{self.platterSize}, {self.platterName}, {self.platterPrice}"
 
+class CustomerPlatter(models.Model):
+    SMALL = 's'
+    LARGE = 'l'
+    PLATTER_SIZE = (
+        (SMALL, 'small'),
+        (LARGE, 'large')
+    )
+    platterSize = models.CharField(max_length=1, choices=PLATTER_SIZE)
+    platterName = models.CharField(max_length=64)
+    platterPrice = models.DecimalField(max_digits=4, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.platterSize}, {self.platterName}, {self.platterPrice}"
+
 # Implement last
 class Cart(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cartOwner')
@@ -144,6 +158,6 @@ class Cart(models.Model):
     subOrdered = models.ManyToManyField(CustomerSub, blank=True)
     pastaOrdered = models.ManyToManyField(CustomerPasta, blank=True)
     saladOrdered = models.ManyToManyField(CustomerSalad, blank=True)
-    platterOrdered = models.ManyToManyField(Platter, blank=True)
+    platterOrdered = models.ManyToManyField(CustomerPlatter, blank=True)
     cartPaid = models.BooleanField(default=False)
     

@@ -1,24 +1,58 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block stylesheet %}<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
 {% block navbar %}Menu{% endblock %}
 
 {% block body %}
+{% if message %}
+<div class="container-fluid text-center message-text">Platter added to <a href="{% url 'cart'%}">cart</a>!</div>
+{% endif %}
 
-    <div class="container-fluid text-center title-text">Our Menu</div>
-    <div class="container-fluid text-center">
-            <a href="{% url 'pizza' %}">Pizza</a> | 
-            <a href="{% url 'sub' %}">Subs</a> | 
-            <a href="{% url 'pasta' %}">Pasta</a> | 
-            <a href="{% url 'salad' %}">Salads</a> | 
-            <a href="{% url 'platter' %}">Dinner Platters</a>
+<div class="container-fluid text-center title-text">Our Menu</div>
+<div class="container-fluid text-center">
+    <a href="{% url 'pizza' %}">Pizza</a> |
+    <a href="{% url 'sub' %}">Subs</a> |
+    <a href="{% url 'pasta' %}">Pasta</a> |
+    <a href="{% url 'salad' %}">Salads</a> |
+    <a href="{% url 'platter' %}">Dinner Platters</a>
+</div>
+<div class="container-fluid text-center">
+    <a href="{% url 'menu' %}">main menu</a>
+</div>
+
+<div class="container text-center main-menu">
+    {% include 'includes/platter-menu.html' %}
+</div>
+
+<form action="{% url 'platter' %}" method="post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <p>
+                    <b>Choose your platter</b><br>
+                    <select name="platterName" id="platterName">
+                        <option value="Garden Salad">Garden Salad</option>
+                        <option value="Greek Salad">Greek Salad</option>
+                        <option value="Antipasto">Antipasto</option>
+                        <option value="Baked Ziti">Baked Ziti</option>
+                        <option value="Meatball Parm">Meatball Parm</option>
+                        <option value="Chicken Parm">Chicken Parm</option>
+                    </select>
+                </p>
+            </div>
+            <div class="col text-center">
+                <p>
+                    <b>Select Size</b><br>
+                    <select name="platterSize" id="platterSize">
+                        <option value="s">Small</option>
+                        <option value="l">Large</option>
+                    </select>
+                </p>
+            </div>
         </div>
-    <div class="container-fluid text-center">
-        <a href="{% url 'menu' %}">main menu</a>
+        <button type="submit" class="btn btn-primary btn-block">Add Platter</button>
     </div>
-
-    <div class="container text-center main-menu">
-        {% include 'includes/platter-menu.html' %}
-    </div>
-    
+</form>
 {% endblock %}
