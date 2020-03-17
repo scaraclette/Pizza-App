@@ -1,24 +1,43 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block stylesheet %}<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css">{% endblock %}
 {% block navbar %}Menu{% endblock %}
 
 {% block body %}
+{% if message %}
+<div class="container-fluid text-center message-text">Salad added to cart!</div>
+{% endif %}
 
-    <div class="container-fluid text-center title-text">Our Menu</div>
-    <div class="container-fluid text-center">
-            <a href="{% url 'pizza' %}">Pizza</a> | 
-            <a href="{% url 'sub' %}">Subs</a> | 
-            <a href="{% url 'pasta' %}">Pasta</a> | 
-            <a href="{% url 'salad' %}">Salads</a> | 
-            <a href="{% url 'platter' %}">Dinner Platters</a>
-        </div>
-    <div class="container-fluid text-center">
-        <a href="{% url 'menu' %}">main menu</a>
-    </div>
+<div class="container-fluid text-center title-text">Our Menu</div>
+<div class="container-fluid text-center">
+    <a href="{% url 'pizza' %}">Pizza</a> |
+    <a href="{% url 'sub' %}">Subs</a> |
+    <a href="{% url 'pasta' %}">Pasta</a> |
+    <a href="{% url 'salad' %}">Salads</a> |
+    <a href="{% url 'platter' %}">Dinner Platters</a>
+</div>
+<div class="container-fluid text-center">
+    <a href="{% url 'menu' %}">main menu</a>
+</div>
 
-    <div class="container text-center main-menu">
-        {% include 'includes/salad-menu.html' %}
+<div class="container text-center main-menu">
+    {% include 'includes/salad-menu.html' %}
+</div>
+
+<form action="{% url 'salad' %}" method="post">
+    {% csrf_token %}
+    <div class="container text-center">
+        <p><b>Choose your Salad</b><br>
+            <select name="sName" id="saladName">
+                <option value="Garden Salad">Garden Salad</option>
+                <option value="Greek Salad">Greek Salad</option>
+                <option value="Antipasto">Antipasto</option>
+                <option value="Salad w/Tuna">Salad w/ Tuna</option>
+            </select>
+        </p>
+        <button type="submit" class="btn btn-primary btn-block">Add Salad</button>
     </div>
-    
+</form>
+
 {% endblock %}

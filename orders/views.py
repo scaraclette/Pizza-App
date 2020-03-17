@@ -102,12 +102,52 @@ def sub(request):
     return render(request, "sub.html")
 
 def pasta(request):
-    if request.method == 'GET':
-        return render(request, "pasta.html")
+    if request.method == 'POST':
+        user = request.user
+        pastaName = request.POST['pastaName']
+        getPasta = Pasta.objects.get(pastaName=pastaName)
+        newPasta = CustomerPasta.objects.create(pastaName=pastaName, pastaPrice=getPasta.pastaPrice)
+
+        # Add to cart
+        currentCart = user.cartOwner.all().last()
+        if currentCart == None:
+            newCart = Cart.objects.create(customer=user, totalPrice=newPasta.pastaPrice)
+            newCart.pastaOrdered.add(newPasta)
+            newCart.save()
+        else:
+            currentCart.totalPrice += newPasta.pastaPrice
+            currentCart.pastaOrdered.add(newPasta)
+            currentCart.save()
+        context = {
+            "message":True,
+        }
+        return render(request, "pasta.html", context)
+            
+    return render(request, "pasta.html")
 
 def salad(request):
-    if request.method == 'GET':
-        return render(request, "salad.html")
+    if request.method == 'POST':
+        user = request.user
+        saladName = request.POST['sName']
+        print(saladName)
+        getSalad = Salad.objects.get(saladName=saladName)
+        newSalad = CustomerSalad.objects.create(saladName=saladName, saladPrice=getSalad.saladPrice)
+
+        # Add to cart
+        currentCart = user.cartOwner.all().last()
+        if currentCart == None:
+            newCart = Cart.objects.create(customer=user, totalPrice=newSalad.saladPrice)
+            newCart.saladOrdered.add(newSalad)
+            newCart.save()
+        else:
+            currentCart.totalPrice += newSalad.saladPrice
+            currentCart.saladOrdered.add(newSalad)
+            currentCart.save()
+        context = {
+            "message":True,
+        }
+        return render(request, "salad.html", context)
+    return render(request, "salad.html")
 
 def platter(request):
     if request.method == 'GET':
@@ -125,13 +165,26 @@ def cart(request):
         return render(request, "cart.html", context)
 
     checkSub = currentCart.subOrdered.all()
+    checkPasta = currentCart.pastaOrdered.all()
+    checkSalad = currentCart.saladOrdered.all()
     pizza = len(checkPizza) != 0
-    sub = checkSub != None
-    print(checkSub)
+    sub = len(checkSub) != 0
+    pasta = len(checkPasta) != 0
+    salad = len(checkSalad) != 0
+
+    print(pizza)
+    print(sub)
+    print(pasta)
+    print(salad)
+
     context = {
         "cart":currentCart,
         "pizza":pizza,
         "sub":sub,
-        "checkSub":checkSub
+        "pasta":pasta,
+        "salad":salad,
+        "checkSub":checkSub,
+        "checkPasta":checkPasta,
+        "checkSalad":checkSalad
     }
     return render(request, "cart.html", context)

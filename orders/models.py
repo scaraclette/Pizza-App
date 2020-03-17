@@ -115,6 +115,13 @@ class Salad(models.Model):
     def __str__(self):
         return f"{self.saladName}, {self.saladPrice}"
 
+class CustomerSalad(models.Model):
+    saladName = models.CharField(max_length=64)
+    saladPrice = models.DecimalField(max_digits=4, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.saladName}, {self.saladPrice}"
+
 class Platter(models.Model):
     SMALL = 's'
     LARGE = 'l'
@@ -136,7 +143,7 @@ class Cart(models.Model):
     pizzaOrdered = models.ManyToManyField(CustomerPizza, blank=True)
     subOrdered = models.ManyToManyField(CustomerSub, blank=True)
     pastaOrdered = models.ManyToManyField(CustomerPasta, blank=True)
-    saladOrdered = models.ManyToManyField(Salad, blank=True)
+    saladOrdered = models.ManyToManyField(CustomerSalad, blank=True)
     platterOrdered = models.ManyToManyField(Platter, blank=True)
     cartPaid = models.BooleanField(default=False)
     

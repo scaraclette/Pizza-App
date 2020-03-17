@@ -27,6 +27,16 @@
 
 <form action="{% url 'pasta' %}" method="post">
     {% csrf_token %}
+    <div class="container text-center">
+        <p><b>Choose your pasta</b><br>
+            <select name="pastaName" id="pastaName">
+                <option value="Baked Ziti w/ Mozzarella">Baked Ziti w/ Mozzarella</option>
+                <option value="Baked Ziti w/ Meatballs">Baked Ziti w/ Meatballs</option>
+                <option value="Baked Ziti w/ Chicken">Baked Ziti w/ Chicken</option>
+            </select>
+        </p>
+        <button type="submit" class="btn btn-primary btn-block">Add Pasta</button>
+    </div>
 </form>
 
 {% endblock %}

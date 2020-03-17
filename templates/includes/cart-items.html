@@ -58,3 +58,25 @@
 {% endif %}
 
 <!--PASTA-->
+{% if pasta %}
+<b>Pasta:</b><br>
+{% for p in checkPasta %}
+<p>
+    {{p.pastaName}}<br>
+
+    total: ${{p.pastaPrice}}<br>
+</p>
+{% endfor %}
+{% endif %}
+
+<!--SALAD-->
+{% if salad %}
+<b>Salad:</b><br>
+{% for s in checkSalad %}
+<p>
+    {{s.saladName}}<br>
+
+    total: ${{s.saladPrice}}<br>
+</p>
+{% endfor %}
+{% endif %}
