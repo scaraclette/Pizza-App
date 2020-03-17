@@ -54,38 +54,43 @@ def sub(request):
     if request.method == 'POST':
         user = request.user
         subName = request.POST['subName']
+        subSize = request.POST['subSize']
         print(subName)
         print(type(subName))
         extraCheese = request.POST['extraCheese']
+        subPrice = Decimal(0)
         if subName == 'Steak + Cheese':
-            print("heyyy")
             steakTopping = request.POST.getlist('steakTopping')
-            subSize = request.POST['subSize']
             getSub = Sub.objects.get(subName=subName, subSize=subSize)
             # Create new sub
             subPrice = getSub.subPrice + Decimal((len(steakTopping) * 0.5))
             newSub = CustomerSub.objects.create(subName=subName, subSize=subSize, subPrice=subPrice)
-            if extraCheese == 'True':
-                newSub.subPrice += Decimal(0.5)
-                newSub.extraCheese = True
-                newSub.save()
             for top in steakTopping:
                 newSub.subTopping.add(Topping.objects.get(topping=top))
-            
-            # Add to cart
-            currentCart = user.cartOwner.all().last()
-            if currentCart == None:
-                newCart = Cart.objects.create(customer=user, totalPrice=newSub.subPrice)
-                newCart.subOrdered.add(newSub)
-                newCart.save()
-            else:
-                currentCart.totalPrice += newSub.subPrice
-                currentCart.subOrdered.add(newSub)
-                currentCart.save()
         elif subName == 'Sausage, Peppers & Onions':
-            pass
+            subSize = 'l'
+            getSub = Sub.objects.get(subName=subName, subSize=subSize)
+            newSub = CustomerSub.objects.create(subName=subName, subSize=subSize, subPrice=getSub.subPrice)
         else:
-            print("other")
+            getSub = Sub.objects.get(subName=subName, subSize=subSize)
+            newSub = CustomerSub.objects.create(subName=subName, subSize=subSize, subPrice=getSub.subPrice)
+
+        # Check if added extra cheese
+        if extraCheese == 'True':
+            newSub.subPrice += Decimal(0.5)
+            newSub.extraCheese = True
+            newSub.save()
+
+        # Add to cart
+        currentCart = user.cartOwner.all().last()
+        if currentCart == None:
+            newCart = Cart.objects.create(customer=user, totalPrice=newSub.subPrice)
+            newCart.subOrdered.add(newSub)
+            newCart.save()
+        else:
+            currentCart.totalPrice += newSub.subPrice
+            currentCart.subOrdered.add(newSub)
+            currentCart.save()
 
         context = {
             'message':True,

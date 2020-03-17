@@ -9,7 +9,7 @@
 {% block body %}
 
 {% if message %}
-<div class="container-fluid text-center title-text">Pizza added to cart!</div>
+<div class="container-fluid text-center message-text">Pizza added to <a href="{% url 'cart'%}">cart</a>!</div>
 {% endif %}
 
 <div class="container-fluid text-center title-text">Our Menu</div>
