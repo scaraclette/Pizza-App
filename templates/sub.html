@@ -8,7 +8,7 @@
 
 {% block body %}
 {% if message %}
-<div class="container-fluid text-center message-text">Sub added to cart!</div>
+<div class="container-fluid text-center message-text">Sub added to <a href="{% url 'cart'%}">cart</a>!</div>
 {% endif %}
 
 <div class="container-fluid text-center title-text">Our Menu</div>

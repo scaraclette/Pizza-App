@@ -12,7 +12,11 @@
 
 <div class="container-fluid text-center title-text">{{user.username}}'s Cart</div>
 <div class="container ">
-    {% if message %}
+    {% if isPaid %}
+    <div class="container text-center">
+        Thank you for paying! <a href="{% url 'index' %}">Home</a>
+    </div>
+    {% elif message %}
     <div class="container text-center">
         Cart is empty! <a href="{% url 'menu' %}">Order now</a>
     </div>
@@ -23,9 +27,16 @@
         <div class="title-text">
             ${{cart.totalPrice}}
         </div>
-        <form action="{% url 'pay' %}" method="post">
+        <!-- <form action="{% url 'pay' %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-primary btn-block">Pay Order</button>
+        </form> -->
+
+        <form action="{% url 'cart' %}" method="post">
+            {% csrf_token %}
+            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="{{ key }}"
+            data-description="Pinocchio's Pizza & Subs" data-amount="{{stripeTotal}}" data-locale="auto">
+            </script>
         </form>
     </div>
     {% endif %}

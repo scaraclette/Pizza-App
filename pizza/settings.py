@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'widget_tweaks'
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +129,7 @@ STATICFILES_DIRS = [
 
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_REDIRECT_URL = 'index'
+
+# STRIP
+STRIPE_SECRET_KEY = 'sk_test_PbPxpWvHM5EjJsd6axk4H2GC00RQBlVs8S'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_xa5ggg1bLtXPESYT6tgkuYgN00YLWfZx5v'

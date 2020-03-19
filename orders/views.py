@@ -1,7 +1,11 @@
+import stripe
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
 from decimal import Decimal
+from django.conf import settings
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your views here.
 def index(request):
@@ -28,14 +32,14 @@ def pizza(request):
         # Add to cart
         currentCart = user.cartOwner.all().last()
         # if cart doesn't exist, create new cart and add the totalPrice
-        if currentCart == None:
-            newCart = Cart.objects.create(customer=user, totalPrice=newPizza.pizzaPrice)
-            newCart.pizzaOrdered.add(newPizza)
-            newCart.save()
-        else:
+        try:
+            currentCart = user.cartOwner.get(isPaid=False)
             currentPrice = currentCart.totalPrice + newPizza.pizzaPrice
-            print(currentPrice)
             currentCart.totalPrice = currentPrice
+            currentCart.pizzaOrdered.add(newPizza)
+            currentCart.save()
+        except:
+            currentCart = Cart.objects.create(customer=user, totalPrice=newPizza.pizzaPrice)
             currentCart.pizzaOrdered.add(newPizza)
             currentCart.save()
 
@@ -85,12 +89,14 @@ def sub(request):
 
         # Add to cart
         currentCart = user.cartOwner.all().last()
-        if currentCart == None:
-            newCart = Cart.objects.create(customer=user, totalPrice=newSub.subPrice)
-            newCart.subOrdered.add(newSub)
-            newCart.save()
-        else:
-            currentCart.totalPrice += newSub.subPrice
+        try:
+            currentCart = user.cartOwner.get(isPaid=False)
+            currentPrice = currentCart.totalPrice + newSub.subPrice
+            currentCart.totalPrice = currentPrice
+            currentCart.subOrdered.add(newSub)
+            currentCart.save()
+        except:
+            currentCart = Cart.objects.create(customer=user, totalPrice=newSub.subPrice)
             currentCart.subOrdered.add(newSub)
             currentCart.save()
 
@@ -175,8 +181,26 @@ def platter(request):
 
 def cart(request):
     user = request.user
+
+    if request.method == 'POST':
+        currentCart = user.cartOwner.get(cartPaid=False)
+        charge = stripe.Charge.create(
+            amount=int(currentCart.totalPrice * 100),
+            currency='usd',
+            description='Order Paid!', 
+            source=request.POST['stripeToken'] 
+        )
+        context = {
+            "message":False,
+            "isPaid":True,
+        }
+        currentCart.cartPaid = True
+        currentCart.save()
+        return render(request, 'cart.html', context)
+
     try:
-        currentCart = user.cartOwner.all().last()
+        # currentCart = user.cartOwner.all().last()
+        currentCart = user.cartOwner.get(cartPaid=False)
         checkPizza = currentCart.pizzaOrdered.all()
     except:
         context = {
@@ -194,11 +218,8 @@ def cart(request):
     salad = len(checkSalad) != 0
     platter = len(checkPlatter) != 0
 
-    print(pizza)
-    print(sub)
-    print(pasta)
-    print(salad)
-
+    stripeTotal = int(currentCart.totalPrice * 100)
+    
     context = {
         "cart":currentCart,
         "pizza":pizza,
@@ -210,8 +231,12 @@ def cart(request):
         "checkPasta":checkPasta,
         "checkSalad":checkSalad,
         "checkPlatter":checkPlatter,
+        "stripeTotal":stripeTotal,
+        "key": settings.STRIPE_PUBLISHABLE_KEY,
     }
     return render(request, "cart.html", context)
+
+    
 
 def pay(request):
     return HttpResponse("paid")
