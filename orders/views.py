@@ -4,6 +4,7 @@ from django.shortcuts import render
 from .models import *
 from decimal import Decimal
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -14,6 +15,7 @@ def index(request):
 def menu(request):
     return render(request, "menu.html")
 
+@login_required(login_url='login')
 def pizza(request):
     if request.method == 'POST':
         user = request.user
@@ -33,7 +35,7 @@ def pizza(request):
         currentCart = user.cartOwner.all().last()
         # if cart doesn't exist, create new cart and add the totalPrice
         try:
-            currentCart = user.cartOwner.get(isPaid=False)
+            currentCart = user.cartOwner.get(cartPaid=False)
             currentPrice = currentCart.totalPrice + newPizza.pizzaPrice
             currentCart.totalPrice = currentPrice
             currentCart.pizzaOrdered.add(newPizza)
@@ -56,6 +58,7 @@ def pizza(request):
     }
     return render(request, "pizza.html", context)
 
+@login_required(login_url='login')
 def sub(request):
     if request.method == 'POST':
         user = request.user
@@ -73,6 +76,7 @@ def sub(request):
             newSub = CustomerSub.objects.create(subName=subName, subSize=subSize, subPrice=subPrice)
             for top in steakTopping:
                 newSub.subTopping.add(Topping.objects.get(topping=top))
+            newSub.save()
         elif subName == 'Sausage, Peppers & Onions':
             subSize = 'l'
             getSub = Sub.objects.get(subName=subName, subSize=subSize)
@@ -90,7 +94,7 @@ def sub(request):
         # Add to cart
         currentCart = user.cartOwner.all().last()
         try:
-            currentCart = user.cartOwner.get(isPaid=False)
+            currentCart = user.cartOwner.get(cartPaid=False)
             currentPrice = currentCart.totalPrice + newSub.subPrice
             currentCart.totalPrice = currentPrice
             currentCart.subOrdered.add(newSub)
@@ -107,6 +111,7 @@ def sub(request):
 
     return render(request, "sub.html")
 
+@login_required(login_url='login')
 def pasta(request):
     if request.method == 'POST':
         user = request.user
@@ -116,12 +121,14 @@ def pasta(request):
 
         # Add to cart
         currentCart = user.cartOwner.all().last()
-        if currentCart == None:
-            newCart = Cart.objects.create(customer=user, totalPrice=newPasta.pastaPrice)
-            newCart.pastaOrdered.add(newPasta)
-            newCart.save()
-        else:
-            currentCart.totalPrice += newPasta.pastaPrice
+        try:
+            currentCart = user.cartOwner.get(cartPaid=False)
+            currentPrice = currentCart.totalPrice + newPasta.pastaPrice
+            currentCart.totalPrice = currentPrice
+            currentCart.pastaOrdered.add(newPasta)
+            currentCart.save()
+        except:
+            currentCart = Cart.objects.create(customer=user, totalPrice=newPasta.pastaPrice)
             currentCart.pastaOrdered.add(newPasta)
             currentCart.save()
         context = {
@@ -131,6 +138,7 @@ def pasta(request):
             
     return render(request, "pasta.html")
 
+@login_required(login_url='login')
 def salad(request):
     if request.method == 'POST':
         user = request.user
@@ -141,20 +149,24 @@ def salad(request):
 
         # Add to cart
         currentCart = user.cartOwner.all().last()
-        if currentCart == None:
-            newCart = Cart.objects.create(customer=user, totalPrice=newSalad.saladPrice)
-            newCart.saladOrdered.add(newSalad)
-            newCart.save()
-        else:
-            currentCart.totalPrice += newSalad.saladPrice
+        try:
+            currentCart = user.cartOwner.get(cartPaid=False)
+            currentPrice = currentCart.totalPrice + newSalad.saladPrice
+            currentCart.totalPrice = currentPrice
             currentCart.saladOrdered.add(newSalad)
             currentCart.save()
+        except:
+            currentCart = Cart.objects.create(customer=user, totalPrice=newSalad.saladPrice)
+            currentCart.saladOrdered.add(newSalad)
+            currentCart.save()
+
         context = {
             "message":True,
         }
         return render(request, "salad.html", context)
     return render(request, "salad.html")
 
+@login_required(login_url='login')
 def platter(request):
     if request.method == 'POST':
         user = request.user
@@ -165,20 +177,24 @@ def platter(request):
 
         # Add to cart
         currentCart = user.cartOwner.all().last()
-        if currentCart == None:
-            newCart = Cart.objects.create(customer=user, totalPrice=newPlatter.platterPrice)
-            newCart.platterOrdered.add(newPlatter)
-            newCart.save()
-        else:
-            currentCart.totalPrice += newPlatter.platterPrice
+        try:
+            currentCart = user.cartOwner.get(cartPaid=False)
+            currentPrice = currentCart.totalPrice + newPlatter.platterPrice
+            currentCart.totalPrice = currentPrice
             currentCart.platterOrdered.add(newPlatter)
             currentCart.save()
+        except:
+            currentCart = Cart.objects.create(customer=user, totalPrice=newPlatter.platterPrice)
+            currentCart.platterOrdered.add(newPlatter)
+            currentCart.save()
+
         context = {
             "message":True,
         }
         return render(request, "platter.html", context)
     return render(request, "platter.html")
 
+@login_required(login_url='login')
 def cart(request):
     user = request.user
 
@@ -237,6 +253,3 @@ def cart(request):
     return render(request, "cart.html", context)
 
     
-
-def pay(request):
-    return HttpResponse("paid")

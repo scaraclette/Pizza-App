@@ -14,7 +14,12 @@
 <div class="container ">
     {% if isPaid %}
     <div class="container text-center">
-        Thank you for paying! <a href="{% url 'index' %}">Home</a>
+        Thank you for paying! We'll deliver your order shortly.<br>
+        <div class="container text-center">
+            <img src="http://www.pinocchiospizza.net/images/pinocchio_72.gif" class="img-fluid"
+                        alt="Responsive image">
+        </div>
+        <a href="{% url 'index' %}">Home</a>
     </div>
     {% elif message %}
     <div class="container text-center">
@@ -27,10 +32,6 @@
         <div class="title-text">
             ${{cart.totalPrice}}
         </div>
-        <!-- <form action="{% url 'pay' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary btn-block">Pay Order</button>
-        </form> -->
 
         <form action="{% url 'cart' %}" method="post">
             {% csrf_token %}
