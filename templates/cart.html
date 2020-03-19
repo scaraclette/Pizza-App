@@ -13,21 +13,24 @@
 <div class="container-fluid text-center title-text">{{user.username}}'s Cart</div>
 <div class="container ">
     {% if message %}
-    <div class="container text-center">Cart is empty!</div>
+    <div class="container text-center">
+        Cart is empty! <a href="{% url 'menu' %}">Order now</a>
+    </div>
     {% else %}
     {% include 'includes/cart-items.html' %}
+    <div class="container text-right">
+        Subtotal:<br>
+        <div class="title-text">
+            ${{cart.totalPrice}}
+        </div>
+        <form action="{% url 'pay' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-block">Pay Order</button>
+        </form>
+    </div>
     {% endif %}
 </div>
-<div class="container text-right">
-    Subtotal:<br>
-    <div class="title-text">
-        ${{cart.totalPrice}}
-    </div>
-    <form action="{% url 'pay' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary btn-block">Pay Order</button>
-    </form>
-</div>
+
 
 
 {% endblock %}
