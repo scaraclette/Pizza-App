@@ -14,4 +14,5 @@ $ python3 manage.py migrate
 $ python3 manage.py runserver
 ```
 # Other notes
-Personal touch: this project has an added Stripe API for payment method. 
+Personal touch: this project has an added Stripe API for payment method.<br>
+Future implementations: project could have an added delivery method by extending user field with address 
